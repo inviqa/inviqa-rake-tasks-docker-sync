@@ -16,7 +16,7 @@ module RakeTasksDockerSync
     end
 
     def refresh
-      containers = `docker ps -q #{@services.join(' ')}`.split("\n")
+      containers = `docker ps -q | grep -E '(#{@services.map{|service|Regexp.escape(service)}.join('|')})'`.split("\n")
       @inspections = []
       containers.each do |container_ref|
         @inspections << JSON.parse(`docker inspect #{container_ref}`).first

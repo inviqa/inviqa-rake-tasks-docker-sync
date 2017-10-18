@@ -1,3 +1,5 @@
+require_relative 'services'
+
 namespace :docker do
   namespace :sync do
     def services_from_args(args)
