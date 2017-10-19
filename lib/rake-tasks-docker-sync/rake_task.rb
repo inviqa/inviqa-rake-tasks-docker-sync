@@ -10,21 +10,21 @@ namespace :docker do
       puts '==> Starting docker-sync:'
       services = sync_services_from_args(args)
       services.up
-      puts "==> docker-sync started\n"
+      puts "==> docker-sync started\n\n"
     end
 
     task :stop, :name do |_task, args|
       puts '==> Stopping docker-sync:'
       services = sync_services_from_args(args)
       services.stop
-      puts "==> docker-sync stopped\n"
+      puts "==> docker-sync stopped\n\n"
     end
 
     task :clean, :name do |_task, args|
       puts '==> Removing docker-sync container and volume:'
       services = sync_services_from_args(args)
       services.clean
-      puts "==> docker-sync container and volume cleaned\n"
+      puts "==> docker-sync container and volume cleaned\n\n"
     end
   end
 end
