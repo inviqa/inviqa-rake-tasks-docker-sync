@@ -6,7 +6,7 @@ module RakeTasksDockerSync
     def initialize(name)
       unless name
         hem_config = {}
-        %w(tools/hem/config.yaml tools/hobo/config.yaml).each do |file|
+        %w[tools/hem/config.yaml tools/hobo/config.yaml].each do |file|
           hem_config = YAML.load_file(file) if !hem_config && File.exist?(file)
         end
         name = hem_config[:name]
@@ -16,7 +16,7 @@ module RakeTasksDockerSync
     end
 
     def refresh
-      containers = `docker ps -q | grep -E '(#{@services.map{|service|Regexp.escape(service)}.join('|')})'`.split("\n")
+      containers = `docker ps -q | grep -E '(#{@services.map { |service| Regexp.escape(service) }.join('|')})'`.split("\n")
       @inspections = []
       containers.each do |container_ref|
         @inspections << JSON.parse(`docker inspect #{container_ref}`).first
