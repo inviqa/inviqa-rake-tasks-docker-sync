@@ -28,7 +28,7 @@ module RakeTasksDockerSync
     end
 
     def stop
-      system 'docker-sync', 'stop', '-v'
+      system 'docker-sync', 'stop'
     end
 
     def down
