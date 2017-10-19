@@ -23,14 +23,16 @@ namespace :docker do
     task :clean, :name do |_task, args|
       puts '==> Removing docker-sync container and volume:'
       services = sync_services_from_args(args)
-      services.clean
+      services.down
       puts "==> docker-sync container and volume cleaned\n\n"
     end
   end
 end
 
-Rake::Task['docker:start'].enhance(['docker:sync:start'])
-Rake::Task['docker:stop'].enhance(['docker:sync:stop'])
-Rake::Task['docker:destroy'].enhance do
-  Rake::Task['docker:sync:clean'].invoke
+if RUBY_PLATFORM =~ /darwin/
+  Rake::Task['docker:start'].enhance(['docker:sync:start'])
+  Rake::Task['docker:stop'].enhance(['docker:sync:stop'])
+  Rake::Task['docker:destroy'].enhance do
+    Rake::Task['docker:sync:clean'].invoke
+  end
 end
