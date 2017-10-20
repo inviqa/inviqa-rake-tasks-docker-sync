@@ -31,7 +31,9 @@ end
 
 if RUBY_PLATFORM =~ /darwin/
   Rake::Task['docker:start'].enhance(['docker:sync:start'])
-  Rake::Task['docker:stop'].enhance(['docker:sync:stop'])
+  Rake::Task['docker:stop'].enhance do
+    Rake::Task['docker:sync:stop'].invoke
+  end
   Rake::Task['docker:destroy'].enhance do
     Rake::Task['docker:sync:clean'].invoke
   end
