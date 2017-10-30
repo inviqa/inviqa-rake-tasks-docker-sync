@@ -4,23 +4,31 @@ require 'rake-tasks-docker'
 module RakeTasksDockerSync
   class Services < RakeTasksDocker::Services
     def initialize(name)
-      unless name
-        hem_config = {}
-        %w[tools/hem/config.yaml tools/hobo/config.yaml].each do |file|
-          hem_config = YAML.load_file(file) if !hem_config && File.exist?(file)
-        end
-        name = hem_config[:name]
-      end
-
       @services = ["#{name}-sync"]
     end
 
     def refresh
-      containers = `docker ps -q | grep -E '(#{@services.map { |service| Regexp.escape(service) }.join('|')})'`.split("\n")
+      containers = `#{@services.map { |service| "docker ps -q -f 'name=#{service}'" }.join(' && ')}`.split("\n")
       @inspections = []
       containers.each do |container_ref|
         @inspections << JSON.parse(`docker inspect #{container_ref}`).first
       end
+    end
+
+    def states
+      states = {}
+      @inspections.each do |inspection|
+        next unless inspection['State']
+        state = inspection['State']
+        states[inspection['Name']] = if state['Running']
+                                       "#{state['Status']}"
+                                     elsif state['ExitCode'] > 0
+                                       "#{state['Status']} (non-zero exit code)"
+                                     else
+                                       state['Status']
+                                     end
+      end
+      states
     end
 
     def up
