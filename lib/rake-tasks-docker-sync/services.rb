@@ -21,7 +21,7 @@ module RakeTasksDockerSync
         next unless inspection['State']
         state = inspection['State']
         states[inspection['Name']] = if state['Running']
-                                       "#{state['Status']}"
+                                       (state['Status']).to_s
                                      elsif state['ExitCode'] > 0
                                        "#{state['Status']} (non-zero exit code)"
                                      else
