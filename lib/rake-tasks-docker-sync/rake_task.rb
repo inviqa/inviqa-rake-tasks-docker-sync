@@ -55,7 +55,7 @@ namespace :docker do
   end
 end
 
-if RUBY_PLATFORM =~ /darwin/ && !ENV['RAKE_USE_DELEGATED']
+if RUBY_PLATFORM =~ /darwin/ && %w[true yes y].include?(ENV['RAKE_USE_DOCKER_SYNC'])
   Rake::Task['docker:start'].enhance(['docker:sync:start'])
   Rake::Task['docker:stop'].enhance do
     Rake::Task['docker:sync:stop'].invoke
