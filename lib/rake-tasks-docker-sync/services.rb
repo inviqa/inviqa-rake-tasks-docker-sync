@@ -3,8 +3,16 @@ require 'rake-tasks-docker'
 
 module RakeTasksDockerSync
   class Services < RakeTasksDocker::Services
-    def initialize(name)
-      @services = ["#{name}-sync"]
+    def self.from_args(_args)
+      raise 'No docker-sync.yml configuration found in your path' unless File.exist?('docker-sync.yml')
+
+      docker_sync_config = YAML.load_file('docker-sync.yml')
+
+      self.new(docker_sync_config['syncs'].keys)
+    end
+
+    def initialize(syncs)
+      @services = syncs
     end
 
     def up
