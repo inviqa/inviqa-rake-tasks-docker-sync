@@ -20,7 +20,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'docker-sync'
   spec.add_dependency 'rake', '>= 10.0', '<= 13'
-  spec.add_dependency 'rake-tasks-docker'
+  spec.add_dependency 'rake-tasks-docker', '>= 0.2'
 
   spec.add_development_dependency 'rspec', '~> 3.6'
   spec.add_development_dependency 'rubocop', '~> 0.51.0'
