@@ -16,24 +16,42 @@ module RakeTasksDockerSync
     end
 
     def up
-      system 'docker-sync', 'start'
+      execute do
+        system 'docker-sync', 'start'
+      end
     end
 
     def stop
-      system 'docker-sync', 'stop'
+      execute do
+        system 'docker-sync', 'stop'
+      end
     end
 
     def down
-      system 'docker-sync', 'clean'
+      execute do
+        system 'docker-sync', 'clean'
+      end
     end
 
     def exec(user, command)
       @services.each do |service|
-        system 'docker', 'exec', '--user', user, service, command
+        execute do
+          system 'docker', 'exec', '--user', user, service, command
+        end
       end
     end
 
     protected
+
+    def execute(&block)
+      if defined?(Bundler)
+        Bundler.with_clean_env do
+          yield block
+        end
+      else
+        yield block
+      end
+    end
 
     def containers
       `#{@services.map { |service| "docker ps -q -f 'name=#{service}'" }.join(' && ')}`.split("\n")
