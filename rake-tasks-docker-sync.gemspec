@@ -18,7 +18,6 @@ Gem::Specification.new do |spec|
   spec.files = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'docker-sync'
   spec.add_dependency 'rake', '>= 10.0', '<= 13'
   spec.add_dependency 'rake-tasks-docker', '>= 0.2'
 
